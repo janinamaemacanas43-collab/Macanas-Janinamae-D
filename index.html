@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title> JANINAMAE MACANAS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    /* RESET */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background: black;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    /* STAR BACKGROUND */
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    /* LAYOUT */
+    header {
+      text-align: center;
+      padding: 60px 20px;
+      background: rgba(0,0,0,0.4);
+    }
+
+    header h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    section {
+      padding: 60px 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.1);
+      padding: 25px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      backdrop-filter: blur(10px);
+    }
+
+    h2 {
+      margin-bottom: 15px;
+      color: #7dd3fc;
+    }
+
+    /* GAME */
+    #gameArea {
+      position: relative;
+      height: 300px;
+      border: 2px dashed #7dd3fc;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .star {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background: radial-gradient(circle, #fff, #7dd3fc);
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    #score {
+      margin-top: 15px;
+      font-size: 1.2rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+
+<body>
+
+<canvas id="stars"></canvas>
+
+<header>
+  <h1>Janinamae Macanas</h1>
+  <p>STEM 12- Bernhard Riemann</p>
+</header>
+
+<section>
+  <div class="card">
+    <h2>👤 About Me</h2>
+    <p>
+      Janinamae Macanas<strong></strong>, a grade 12 STEM students in  Sablayan National Comprehensive High School
+      she love astronomy, writing's, and reading.
+      
+      she injoyed learning by experience and solving thing.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>  personal website</h2>
+    <p>
+      This personal website features:
+      <ul>
+        
+        <li>Mini browser games</li>
+        <li> personal info</li>
+      </ul>
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>🎮 Mini Game: Catch the Star</h2>
+    <p>Click the glowing star as fast as you can!</p>
+
+    <div id="gameArea"></div>
+    <div id="score">Score: 0</div>
+  </div>
+</section>
+
+<footer>
+  Janina's website💫
+</footer>
+
+<script>
+/* STAR BACKGROUND ANIMATION */
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let stars = [];
+
+for (let i = 0; i < 150; i++) {
+  stars.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 2,
+    speed: Math.random() * 0.5 + 0.2
+  });
+}
+
+function animateStars() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "white";
+
+  stars.forEach(star => {
+    ctx.beginPath();
+    ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+    ctx.fill();
+
+    star.y += star.speed;
+    if (star.y > canvas.height) {
+      star.y = 0;
+      star.x = Math.random() * canvas.width;
+    }
+  });
+
+  requestAnimationFrame(animateStars);
+}
+
+animateStars();
+
+/* GAME LOGIC */
+const gameArea = document.getElementById("gameArea");
+const scoreDisplay = document.getElementById("score");
+let score = 0;
+
+function spawnStar() {
+  gameArea.innerHTML = "";
+
+  const star = document.createElement("div");
+  star.classList.add("star");
+
+  star.style.top = Math.random() * 260 + "px";
+  star.style.left = Math.random() * 260 + "px";
+
+  star.onclick = () => {
+    score++;
+    scoreDisplay.textContent = "Score: " + score;
+    spawnStar();
+  };
+
+  gameArea.appendChild(star);
+}
+
+spawnStar();
+
+/* RESIZE HANDLER */
+window.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+</script>
+
+</body>
+</html>
